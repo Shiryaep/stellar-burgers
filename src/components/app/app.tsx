@@ -11,19 +11,40 @@ import {
   ResetPassword,
 } from '@pages';
 import { Preloader } from '@ui';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
 import { ProtectedRoute } from '../route-protection/route-protection';
 
 import type { AppContentProps } from './type';
 import type { TIngredient } from '@utils-types';
+import type { Location } from 'react-router-dom';
 
 import '../../index.css';
 
 import styles from './app.module.css';
 
+type AppLocationState = {
+  background?: Location;
+  from?: Location;
+};
+
 const App = (): React.JSX.Element => {
-  const ingredients: TIngredient[] = [];
+  // Moq данные чисто для тестирования путей
+  const ingredients: TIngredient[] = [
+    {
+      _id: 'string',
+      name: 'string',
+      type: 'string',
+      proteins: 123,
+      fat: 123,
+      carbohydrates: 123,
+      calories: 123,
+      price: 123,
+      image: 'string',
+      image_large: 'string',
+      image_mobile: 'string',
+    },
+  ];
   const isIngredientsLoading = false;
   const ingredientsError = null;
 
@@ -72,11 +93,15 @@ const AppContent = ({
 
 const RouteComponent = (): React.JSX.Element => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const state = location.state as AppLocationState | null | undefined;
+  const background = state?.background;
 
   return (
     <>
       {/* Ordinary routes */}
-      <Routes>
+      <Routes location={background ?? location}>
         <Route path="/" element={<ConstructorPage />} />
         <Route path="/feed" element={<Feed />} />
         {/* Protected routes */}
@@ -143,32 +168,34 @@ const RouteComponent = (): React.JSX.Element => {
         <Route path="*" element={<NotFound404 />} />
       </Routes>
       {/* Modal routes */}
-      <Routes>
-        <Route
-          path="/feed/:number"
-          element={
-            <Modal title="AOAOAOOAOAOOAOOAOAOAOOA" onClose={() => void navigate(-1)}>
-              <OrderInfo />
-            </Modal>
-          }
-        />
-        <Route
-          path="/ingredients/:id"
-          element={
-            <Modal title="AOAOAOOAOAOOAOOAOAOAOOA" onClose={() => void navigate(-1)}>
-              <IngredientDetails />
-            </Modal>
-          }
-        />
-        <Route
-          path="/profile/orders/:number"
-          element={
-            <Modal title="AOAOAOOAOAOOAOOAOAOAOOA" onClose={() => void navigate(-1)}>
-              <OrderInfo />
-            </Modal>
-          }
-        />
-      </Routes>
+      {background && (
+        <Routes>
+          <Route
+            path="/feed/:number"
+            element={
+              <Modal title="AOAOAOOAOAOOAOOAOAOAOOA" onClose={() => void navigate(-1)}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+          <Route
+            path="/ingredients/:id"
+            element={
+              <Modal title="AOAOAOOAOAOOAOOAOAOAOOA" onClose={() => void navigate(-1)}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path="/profile/orders/:number"
+            element={
+              <Modal title="AOAOAOOAOAOOAOOAOAOAOOA" onClose={() => void navigate(-1)}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
     </>
   );
 };
