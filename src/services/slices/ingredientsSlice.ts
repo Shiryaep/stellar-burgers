@@ -1,12 +1,12 @@
 import { getIngredientsApi } from '@/utils/burger-api';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, type SerializedError } from '@reduxjs/toolkit';
 
 import type { TIngredient } from '@/utils/types';
 
 type TIngredientsState = {
   ingredients: TIngredient[];
   isLoading: boolean;
-  errors: string | null;
+  errors: SerializedError | null;
 };
 
 const staticErrorMessage = 'Произошла ошибка при загрузке ингредиентов';
@@ -17,11 +17,8 @@ const initState: TIngredientsState = {
   errors: null,
 };
 
-export const getIngredients = createAsyncThunk(
-  'ingredients/getIngredients',
-  async () => {
-    return await getIngredientsApi();
-  }
+export const getIngredients = createAsyncThunk('ingredients/getIngredients', async () =>
+  getIngredientsApi()
 );
 
 export const ingredientsSlice = createSlice({
@@ -36,11 +33,14 @@ export const ingredientsSlice = createSlice({
       })
       .addCase(getIngredients.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.errors = null;
         state.ingredients = action.payload;
       })
       .addCase(getIngredients.rejected, (state, action) => {
         state.isLoading = false;
-        state.errors = action.error.message ?? staticErrorMessage;
+        state.errors = action.error ?? staticErrorMessage;
       });
   },
 });
+
+export default ingredientsSlice.reducer;

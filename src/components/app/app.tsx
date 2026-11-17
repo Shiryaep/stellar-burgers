@@ -1,3 +1,5 @@
+import { getIngredients } from '@/services/slices/ingredientsSlice';
+import { useDispatch, useSelector } from '@/services/store';
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import {
   ConstructorPage,
@@ -11,12 +13,12 @@ import {
   ResetPassword,
 } from '@pages';
 import { Preloader } from '@ui';
+import { useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
 import { ProtectedRoute } from '../route-protection/route-protection';
 
 import type { AppContentProps } from './type';
-import type { TIngredient } from '@utils-types';
 import type { Location } from 'react-router-dom';
 
 import '../../index.css';
@@ -29,24 +31,15 @@ type AppLocationState = {
 };
 
 const App = (): React.JSX.Element => {
-  // Moq данные чисто для тестирования путей
-  const ingredients: TIngredient[] = [
-    {
-      _id: 'string',
-      name: 'string',
-      type: 'string',
-      proteins: 123,
-      fat: 123,
-      carbohydrates: 123,
-      calories: 123,
-      price: 123,
-      image: 'string',
-      image_large: 'string',
-      image_mobile: 'string',
-    },
-  ];
-  const isIngredientsLoading = false;
-  const ingredientsError = null;
+  const dispatch = useDispatch();
+
+  const ingredients = useSelector((state) => state.ingredients.ingredients);
+  const isIngredientsLoading = useSelector((state) => state.ingredients.isLoading);
+  const ingredientsError = useSelector((state) => state.ingredients.errors);
+
+  useEffect(() => {
+    void dispatch(getIngredients());
+  }, [dispatch]);
 
   return (
     <div className={styles.app}>
