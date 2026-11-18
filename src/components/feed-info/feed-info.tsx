@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from '@/services/store';
 import { FeedInfoUI } from '@ui';
 import { useEffect } from 'react';
 
-import type { TOrder } from '@utils-types';
+import type { TFeedState, TOrder } from '@utils-types';
 
 const getOrders = (orders: TOrder[], status: string): number[] =>
   orders
@@ -13,16 +13,24 @@ const getOrders = (orders: TOrder[], status: string): number[] =>
 
 export const FeedInfo = (): React.JSX.Element => {
   const dispatch = useDispatch();
-  const feed = useSelector((state) => state.orders);
-  const orders = feed.feedOrders;
 
   useEffect(() => {
     void dispatch(getFeeds());
   }, [dispatch]);
 
-  const readyOrders = getOrders(orders, 'done');
+  const ordersState = useSelector((state) => state.orders);
+  const { feedOrders, total, totalToday, isLoading, errors } = ordersState;
 
-  const pendingOrders = getOrders(orders, 'pending');
+  const feed: TFeedState = {
+    orders: feedOrders,
+    total,
+    totalToday,
+    isLoading,
+    error: errors,
+  };
+
+  const readyOrders = getOrders(feedOrders, 'done');
+  const pendingOrders = getOrders(feedOrders, 'pending');
 
   return (
     <FeedInfoUI readyOrders={readyOrders} pendingOrders={pendingOrders} feed={feed} />
