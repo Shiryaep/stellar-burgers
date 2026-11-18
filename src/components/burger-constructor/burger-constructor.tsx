@@ -1,16 +1,16 @@
+import { useDispatch, useSelector } from '@/services/store';
 import { BurgerConstructorUI } from '@ui';
 import { useMemo } from 'react';
 
-import type { TConstructorIngredient, TConstructorState, TOrder } from '@utils-types';
+import type { TConstructorIngredient } from '@utils-types';
 
 export const BurgerConstructor = (): React.JSX.Element | null => {
+  const _dispatch = useDispatch();
   /** TODO: Взять переменные constructorItems, orderRequest и orderModalData из стора */
-  const constructorItems: TConstructorState = {
-    bun: null,
-    ingredients: [],
-  };
-  const orderRequest = false;
-  const orderModalData: TOrder | null = null;
+  const constructorItems = useSelector((store) => store.constructor);
+  const orderRequest = useSelector((store) => store.orders.isCreating);
+  const orderModalData = useSelector((store) => store.orders.orderModalData);
+  const _user = useSelector((store) => store.user.user);
 
   const onOrderClick = (): void => {
     if (!constructorItems.bun || orderRequest) return;
