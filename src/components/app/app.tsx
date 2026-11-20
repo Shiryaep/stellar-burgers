@@ -1,4 +1,5 @@
 import { getIngredients } from '@/services/slices/ingredientsSlice';
+import { getUser } from '@/services/slices/userSlice';
 import { useDispatch, useSelector } from '@/services/store';
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import {
@@ -39,6 +40,7 @@ const App = (): React.JSX.Element => {
 
   useEffect(() => {
     void dispatch(getIngredients());
+    void dispatch(getUser());
   }, [dispatch]);
 
   return (

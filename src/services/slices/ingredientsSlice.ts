@@ -13,7 +13,7 @@ const staticErrorMessage = 'Произошла ошибка при загруз�
 
 const initState: TIngredientsState = {
   ingredients: [],
-  isLoading: false,
+  isLoading: true,
   errors: null,
 };
 

@@ -8,8 +8,13 @@ import type { TConstructorIngredient } from '@utils-types';
 
 export const BurgerConstructor = (): React.JSX.Element | null => {
   const dispatch = useDispatch();
-  /** TODO: Взять переменные constructorItems, orderRequest и orderModalData из стора */
-  const constructorItems = useSelector((store) => store.constructor);
+  const constructorItems = useSelector(
+    (state) =>
+      state.constructor ?? {
+        bun: null,
+        ingredients: [],
+      }
+  );
   const orderRequest = useSelector((store) => store.orders.isCreating);
   const orderModalData = useSelector((store) => store.orders.orderModalData);
   const user = useSelector((store) => store.user.user);
@@ -40,15 +45,19 @@ export const BurgerConstructor = (): React.JSX.Element | null => {
     dispatch(clearOrderModal());
   };
 
-  const price = useMemo(
-    () =>
-      (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
-      constructorItems.ingredients.reduce(
-        (s: number, v: TConstructorIngredient) => s + v.price,
-        0
-      ),
-    [constructorItems]
-  );
+  const price = useMemo(() => {
+    const bunPrice = constructorItems.bun ? constructorItems.bun.price * 2 : 0;
+    const ingredientsList = Array.isArray(constructorItems.ingredients)
+      ? constructorItems.ingredients
+      : [];
+
+    const ingredientsPrice = ingredientsList.reduce(
+      (s: number, v: TConstructorIngredient) => s + v.price,
+      0
+    );
+
+    return bunPrice + ingredientsPrice;
+  }, [constructorItems]);
 
   return (
     <BurgerConstructorUI
