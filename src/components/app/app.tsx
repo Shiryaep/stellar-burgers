@@ -103,7 +103,7 @@ const RouteComponent = (): React.JSX.Element => {
         <Route
           path="/login"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth={true}>
               <Login />
             </ProtectedRoute>
           }
@@ -111,7 +111,7 @@ const RouteComponent = (): React.JSX.Element => {
         <Route
           path="/register"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth={true}>
               <Register />
             </ProtectedRoute>
           }
@@ -119,7 +119,7 @@ const RouteComponent = (): React.JSX.Element => {
         <Route
           path="/forgot-password"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth={true}>
               <ForgotPassword />
             </ProtectedRoute>
           }
@@ -127,7 +127,7 @@ const RouteComponent = (): React.JSX.Element => {
         <Route
           path="/reset-password"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth={true}>
               <ResetPassword />
             </ProtectedRoute>
           }
