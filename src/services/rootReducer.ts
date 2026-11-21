@@ -6,7 +6,8 @@ import ordersReducer from './slices/ordersSlice';
 import userReducer from './slices/userSlice';
 
 export const rootReducer = combineReducers({
-  constructor: constructorReducer,
+  constructorButNotOOPConstructorLikeInCSharpFiveDaysOnErrorSearchSpentAAAAAAAAAAA:
+    constructorReducer,
   ingredients: ingredientsReducer,
   orders: ordersReducer,
   user: userReducer,

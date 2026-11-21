@@ -11,14 +11,14 @@ export const IngredientsCategory = ({
   ingredients,
   ref,
 }: TIngredientsCategoryProps): React.JSX.Element => {
-  const burgerConstructor = useSelector((state) => ({
-    bun: state.constructor?.bun ?? null,
-    ingredients: state.constructor?.ingredients ?? [],
-  }));
+  const burgerConstructor = useSelector(
+    (state) =>
+      state.constructorButNotOOPConstructorLikeInCSharpFiveDaysOnErrorSearchSpentAAAAAAAAAAA
+  );
 
   const ingredientsCounters = useMemo(() => {
     const bun = burgerConstructor?.bun;
-    const ingredients = burgerConstructor?.ingredients || [];
+    const ingredients = burgerConstructor?.ingredients ?? [];
     const counters: Record<string, number> = {};
     ingredients.forEach((ingredient: TIngredient) => {
       if (!counters[ingredient._id]) counters[ingredient._id] = 0;

@@ -8,10 +8,10 @@ import type { TConstructorIngredient } from '@utils-types';
 
 export const BurgerConstructor = (): React.JSX.Element | null => {
   const dispatch = useDispatch();
-  const constructorItems = useSelector((state) => ({
-    bun: state.constructor?.bun ?? null,
-    ingredients: state.constructor?.ingredients ?? [],
-  }));
+  const constructorItems = useSelector(
+    (state) =>
+      state.constructorButNotOOPConstructorLikeInCSharpFiveDaysOnErrorSearchSpentAAAAAAAAAAA
+  );
   const orderRequest = useSelector((store) => store.orders.isCreating);
   const orderModalData = useSelector((store) => store.orders.orderModalData);
   const user = useSelector((store) => store.user.user);

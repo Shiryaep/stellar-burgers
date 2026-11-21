@@ -13,7 +13,7 @@ const initState: TConstructorState = {
 };
 
 const constructorSlice = createSlice({
-  name: 'constructor',
+  name: 'constructorButNotOOPConstructorLikeInCSharpFiveDaysOnErrorSearchSpentAAAAAAAAAAA',
   initialState: initState,
   reducers: {
     addIngredient: {
