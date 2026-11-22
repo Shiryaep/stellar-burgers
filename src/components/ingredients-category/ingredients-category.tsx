@@ -1,8 +1,9 @@
+import { useSelector } from '@/services/store';
 import { IngredientsCategoryUI } from '@ui';
 import { useMemo } from 'react';
 
 import type { TIngredientsCategoryProps } from './type';
-import type { TConstructorState, TIngredient } from '@utils-types';
+import type { TIngredient } from '@utils-types';
 
 export const IngredientsCategory = ({
   title,
@@ -10,14 +11,14 @@ export const IngredientsCategory = ({
   ingredients,
   ref,
 }: TIngredientsCategoryProps): React.JSX.Element => {
-  // TODO: Взять переменную из стора
-  const burgerConstructor: TConstructorState = {
-    bun: null,
-    ingredients: [],
-  };
+  const burgerConstructor = useSelector(
+    (state) =>
+      state.constructorButNotOOPConstructorLikeInCSharpFiveDaysOnErrorSearchSpentAAAAAAAAAAA
+  );
 
   const ingredientsCounters = useMemo(() => {
-    const { bun, ingredients } = burgerConstructor;
+    const bun = burgerConstructor?.bun;
+    const ingredients = burgerConstructor?.ingredients ?? [];
     const counters: Record<string, number> = {};
     ingredients.forEach((ingredient: TIngredient) => {
       if (!counters[ingredient._id]) counters[ingredient._id] = 0;
