@@ -128,6 +128,7 @@ const ordersSlice = createSlice({
       .addCase(getOrderByNumber.pending, (state) => {
         state.isGettingByNumber = true;
         state.errors = null;
+        state.orderByNumber = null;
       })
       .addCase(getOrderByNumber.fulfilled, (state, action) => {
         state.isGettingByNumber = false;

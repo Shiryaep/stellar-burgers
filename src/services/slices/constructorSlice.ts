@@ -1,5 +1,7 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 
+import { createOrder } from './ordersSlice';
+
 import type {
   TConstructorIngredient,
   TIngredient,
@@ -10,6 +12,11 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 const initState: TConstructorState = {
   bun: null,
   ingredients: [],
+};
+
+const resetConstructorState = (state: TConstructorState): void => {
+  state.bun = null;
+  state.ingredients = [];
 };
 
 const constructorSlice = createSlice({
@@ -42,10 +49,10 @@ const constructorSlice = createSlice({
       const movingIngredient = state.ingredients.splice(indexFrom, 1)[0];
       state.ingredients.splice(indexTo, 0, movingIngredient);
     },
-    clearConstructor: (state) => {
-      state.bun = null;
-      state.ingredients = [];
-    },
+    clearConstructor: resetConstructorState,
+  },
+  extraReducers: (builder) => {
+    builder.addCase(createOrder.fulfilled, resetConstructorState);
   },
 });
 

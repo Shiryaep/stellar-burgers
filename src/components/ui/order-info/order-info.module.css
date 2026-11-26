@@ -70,3 +70,8 @@
 .total {
   margin-left: auto;
 }
+
+.number {
+  display: block;
+  text-align: center;
+}

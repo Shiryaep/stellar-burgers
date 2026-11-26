@@ -83,7 +83,14 @@ export const RouteComponent = (): React.JSX.Element => {
           }
         />
         {/* Not only modal routes */}
-        <Route path="/feed/:number" element={<OrderInfo />} />
+        <Route
+          path="/feed/:number"
+          element={
+            <div className={styles.detailPageWrap}>
+              <OrderInfo />
+            </div>
+          }
+        />
         <Route
           path="/ingredients/:id"
           element={
@@ -99,7 +106,9 @@ export const RouteComponent = (): React.JSX.Element => {
           path="/profile/orders/:number"
           element={
             <ProtectedRoute>
-              <OrderInfo />
+              <div className={styles.detailPageWrap}>
+                <OrderInfo />
+              </div>
             </ProtectedRoute>
           }
         />

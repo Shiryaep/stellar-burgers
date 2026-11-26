@@ -1,13 +1,16 @@
-import { clearConstructor } from '@/services/slices/constructorSlice';
 import { clearOrderModal, createOrder } from '@/services/slices/ordersSlice';
 import { useDispatch, useSelector } from '@/services/store';
 import { BurgerConstructorUI } from '@ui';
 import { useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import type { TConstructorIngredient } from '@utils-types';
 
 export const BurgerConstructor = (): React.JSX.Element | null => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const constructorItems = useSelector((state) => state.burgerConstructor);
   const orderRequest = useSelector((store) => store.orders.isCreating);
   const orderModalData = useSelector((store) => store.orders.orderModalData);
@@ -15,24 +18,19 @@ export const BurgerConstructor = (): React.JSX.Element | null => {
 
   const onOrderClick = (): void => {
     if (!constructorItems.bun || orderRequest) return;
+
     if (!user) {
-      // TODO нужно сделать редирект - чекнуть доки
+      void navigate('/login', { state: { from: location } });
       return;
     }
+
     const ingredientIds = [
       constructorItems.bun._id,
       ...constructorItems.ingredients.map((ingredient) => ingredient._id),
       constructorItems.bun._id,
     ];
 
-    dispatch(createOrder(ingredientIds))
-      .unwrap()
-      .then(() => {
-        dispatch(clearConstructor());
-      })
-      .catch((error) => {
-        console.log('Ошибка при создании заказа:', error);
-      });
+    void dispatch(createOrder(ingredientIds));
   };
 
   const closeOrderModal = (): void => {
