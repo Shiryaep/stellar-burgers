@@ -1,21 +1,45 @@
+import { clearOrderByNumber, getOrderByNumber } from '@/services/slices/ordersSlice';
+import { useDispatch, useSelector } from '@/services/store';
 import { Preloader, OrderInfoUI } from '@ui';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 
 import type { TIngredient } from '@utils-types';
 
 export const OrderInfo = (): React.JSX.Element => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0,
-  };
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { number } = useParams<{ number: string }>();
+  const orderNumber = Number(number);
 
-  const ingredients: TIngredient[] = [];
+  const openedInModal = !!(location.state as { background?: Location } | null)
+    ?.background;
+
+  const orderByNumber = useSelector((state) => state.orders.orderByNumber);
+  const userOrders = useSelector((state) => state.orders.userOrders);
+  const feedOrders = useSelector((state) => state.orders.feedOrders);
+  const ingredients = useSelector((state) => state.ingredients.ingredients);
+
+  const cachedOrder = useMemo(
+    () =>
+      [...feedOrders, ...userOrders].find((order) => order.number === orderNumber) ??
+      null,
+    [feedOrders, userOrders, orderNumber]
+  );
+
+  useEffect(() => {
+    if (!number) return;
+
+    if (cachedOrder) {
+      dispatch(clearOrderByNumber());
+      return;
+    }
+
+    dispatch(clearOrderByNumber());
+    void dispatch(getOrderByNumber(Number(number)));
+  }, [dispatch, number, orderNumber, cachedOrder]);
+
+  const orderData = cachedOrder ?? orderByNumber;
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
@@ -61,5 +85,5 @@ export const OrderInfo = (): React.JSX.Element => {
     return <Preloader />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  return <OrderInfoUI orderInfo={orderInfo} openedInModal={openedInModal} />;
 };
