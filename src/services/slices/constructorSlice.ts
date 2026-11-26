@@ -13,7 +13,7 @@ const initState: TConstructorState = {
 };
 
 const constructorSlice = createSlice({
-  name: 'constructorButNotOOPConstructorLikeInCSharpFiveDaysOnErrorSearchSpentAAAAAAAAAAA',
+  name: 'burgerConstructor',
   initialState: initState,
   reducers: {
     addIngredient: {
@@ -38,7 +38,7 @@ const constructorSlice = createSlice({
       action: PayloadAction<{ indexFrom: number; indexTo: number }>
     ) => {
       const { indexFrom, indexTo } = action.payload;
-      if (indexTo <= 0 || indexTo >= state.ingredients.length - 1) return;
+      if (indexTo < 0 || indexTo > state.ingredients.length - 1) return;
       const movingIngredient = state.ingredients.splice(indexFrom, 1)[0];
       state.ingredients.splice(indexTo, 0, movingIngredient);
     },

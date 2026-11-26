@@ -26,6 +26,7 @@ type TOrdersState = {
 
 const staticCreateOrderErrorMessage = 'Произошла ошибка при попытке оформить заказ';
 const staticGetFeedsErrorMessage = 'Произошла ошибка при загрузке ленты заказов';
+const staticGetUserOrdersErrorMessage = 'Произошла ошибка при загрузке заказов клиента';
 const staticGetOrderByNumberErrorMessage = 'Произошла ошибка при загрузке заказа по ID';
 
 const initState: TOrdersState = {
@@ -108,9 +109,20 @@ const ordersSlice = createSlice({
         state.errors = action.error.message ?? staticGetFeedsErrorMessage;
       });
 
-    builder.addCase(getUserOrders.fulfilled, (state, action) => {
-      state.userOrders = action.payload;
-    });
+    builder
+      .addCase(getUserOrders.pending, (state) => {
+        state.isLoading = true;
+        state.errors = null;
+      })
+      .addCase(getUserOrders.fulfilled, (state, action) => {
+        state.userOrders = action.payload;
+        state.isLoading = false;
+        state.errors = null;
+      })
+      .addCase(getUserOrders.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errors = action.error.message ?? staticGetUserOrdersErrorMessage;
+      });
 
     builder
       .addCase(getOrderByNumber.pending, (state) => {

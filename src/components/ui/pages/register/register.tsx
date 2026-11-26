@@ -18,6 +18,7 @@ export const RegisterUI = ({
   setPassword,
   userName,
   setUserName,
+  from,
 }: RegisterUIProps): React.JSX.Element => (
   <main className={styles.container}>
     <div className={`pt-6 ${styles.wrapCenter}`}>
@@ -69,7 +70,7 @@ export const RegisterUI = ({
       </form>
       <div className={`${styles.question} text text_type_main-default pb-6`}>
         Уже зарегистрированы?
-        <Link to="/login" className={`pl-2 ${styles.link}`}>
+        <Link to="/login" state={{ from }} className={`pl-2 ${styles.link}`}>
           Войти
         </Link>
       </div>

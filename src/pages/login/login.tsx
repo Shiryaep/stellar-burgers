@@ -1,29 +1,25 @@
-import { loginUser } from '@/services/slices/userSlice';
+import { getErrorsSelector, loginUser } from '@/services/slices/userSlice';
 import { useDispatch, useSelector } from '@/services/store';
 import { LoginUI } from '@ui-pages';
 import { type SyntheticEvent, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
+import type { AppLocationState } from '@/utils/types';
 
 export const Login = (): React.JSX.Element => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
 
-  const error = useSelector((state) => state.user.errors);
-
-  const from = (location.state as { from?: Location })?.from ?? '/';
+  const from = (location.state as AppLocationState | null)?.from;
+  const error = useSelector(getErrorsSelector);
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
     if (email && password) {
-      void dispatch(loginUser({ email, password }))
-        .unwrap()
-        .then(() => {
-          void navigate(from, { replace: true });
-        });
+      void dispatch(loginUser({ email, password })).unwrap().catch();
     } else return;
   };
 
@@ -35,6 +31,7 @@ export const Login = (): React.JSX.Element => {
       password={password}
       setPassword={setPassword}
       handleSubmit={handleSubmit}
+      from={from}
     />
   );
 };

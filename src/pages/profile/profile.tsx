@@ -1,11 +1,11 @@
-import { updateUser } from '@/services/slices/userSlice';
+import { getUserSelector, updateUser } from '@/services/slices/userSlice';
 import { useDispatch, useSelector } from '@/services/store';
 import { ProfileUI } from '@ui-pages';
 import { type SyntheticEvent, useEffect, useState } from 'react';
 
 export const Profile = (): React.JSX.Element => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => getUserSelector(state));
 
   const [formValue, setFormValue] = useState({
     name: user?.name ?? '',

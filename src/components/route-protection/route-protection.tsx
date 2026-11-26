@@ -1,14 +1,11 @@
+import { getIsAuthCheckedSelector, getUserSelector } from '@/services/slices/userSlice';
 import { useSelector } from '@/services/store';
 import { Navigate, useLocation } from 'react-router-dom';
 
 import { Preloader } from '../ui';
 
+import type { AppLocationState } from '@/utils/types';
 import type { ReactNode } from 'react';
-
-type AppLocationState = {
-  background?: Location;
-  from?: Location;
-};
 
 type ProtectedRouteProps = {
   children: ReactNode;
@@ -19,7 +16,8 @@ export const ProtectedRoute = ({
   children,
   onlyUnAuth = false,
 }: ProtectedRouteProps): React.JSX.Element => {
-  const { user, isAuthChecked } = useSelector((state) => state.user);
+  const user = useSelector((state) => getUserSelector(state));
+  const isAuthChecked = useSelector((state) => getIsAuthCheckedSelector(state));
   const location = useLocation();
 
   const state = location.state as AppLocationState | null | undefined;
